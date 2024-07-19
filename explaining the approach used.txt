@@ -1,0 +1,57 @@
+This code is a command-line tool implemented using Python's click library. 
+It allows a user to input text or a file path to text and then generates a summary of the text using the Ollama API and Qwen2 model.
+
+The function "summarize" takes text and file_path as arguments.
+"url" and "headers" are defined for the Ollama API request.
+
+If text is provided directly by the user, then it's split into paragraphs using double newline ('\n' '\n') as a delimiter.
+ This handles the case where the text might contain multiple paragraphs.
+The paragraphs are then joined into a single string with spaces to form the prompt for the summarization.
+
+If file_path is provided by the user, the code attempts to open and read the file.
+It handles potential errors such as FileNotFoundError and other OSError exceptions.
+The file contents are processed similarly to the direct text input, splitting by paragraphs and joining them into a single prompt string.
+
+The final prompt is formatted to include "summarize this" followed by the text or file contents so that the Ollama's Qwen2 model can summarize the text.
+
+API Request:
+url = "http://localhost:11434/api/generate"
+This is the endpoint of the Ollama API where the request is sent.
+http://localhost:11434 indicates that the API is hosted locally on port 11434.
+
+headers = {
+    "Content-Type": "application/json"
+}
+The headers dictionary specifies that the content type of the request body is application/json.
+This is necessary because the API expects the input data in JSON format.
+
+data = {
+    "model": "qwen2",
+    "prompt": f"summarize this {prompt}",
+    "stream": False
+}
+
+The 'data' dictionary contains the information that will be sent in the body of the POST request:
+"model": "qwen2" specifies the model to be used for generating the summary.
+"prompt": f"summarize this {prompt}" contains the actual prompt that the model will process. The prompt is prefixed with "summarize this" followed by the text or file contents.
+"stream": False is an additional parameter indicating whether to stream the response.
+
+response = requests.post(url, headers=headers, data=json.dumps(data))
+
+requests.post() is used to send a POST request to the API.
+'url' is the endpoint we defined earlier.
+'headers' is the headers dictionary specifying the content type.
+data=json.dumps(data) converts the data dictionary to a JSON-formatted string because the requests library requires the data to be in string format when the content type is JSON.
+
+
+Success Handling:
+
+if response.status_code == 200: checks if the request was successful (status code 200).
+summary_json = response.json() converts the response content from JSON format to a Python dictionary.
+summary_text = summary_json.get('response', 'No summary available') extracts the summary text from the response. If the key 'response' is not found, it defaults to 'No summary available'.
+click.echo("Summary:") and click.echo(summary_text) print the summary text to the console.
+
+
+Error Handling:
+else: handles the case where the status code is not 200, indicating a failed request.
+click.echo(f"Failed to summarize. Status code: {response.status_code}") prints an error message with the status code
