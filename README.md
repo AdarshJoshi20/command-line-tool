@@ -1,5 +1,6 @@
 This is a command line tool built with Python that takes either a text input or a file path as a parameter and returns a summary of the text using the Ollama API and Qwen2 model.
-
+The "stoicism.txt" is the file to be summarized.
+The screenshot is the resultant summary of the file "stoicism.txt"
 
 **Features:**
 Summarize text directly provided as input.
