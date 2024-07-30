@@ -38,7 +38,7 @@ def summarize(text, file_path):
 
     data = {
         "model": "qwen2",
-        "prompt": f"summarize this {prompt}",  # Combine 'summarize' with the joined paragraphs
+        "prompt": f"summarize the key points in 3-4 sentences {prompt}",  # Combine 'summarize' with the joined paragraphs
         "stream": False
     }
 
